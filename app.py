@@ -4,10 +4,9 @@ from redis import Redis
 from time import gmtime, strftime
 import json
 import sys
-import os
 
 app = Flask(__name__)
-redis = Redis(host=os.environ['REDIS_HOST'], port=os.environ['REDIS_PORT'])
+redis = Redis(host='127.0.0.1', port=6379)
 
 def to_pretty_json(value):
     try:
