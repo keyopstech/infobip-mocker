@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+    <html>
+    <head>
+        <title>SMS Mock</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="icon" href="{{ url_for('static', filename='favicon.jpeg') }}" />
+        <!-- Compiled and minified CSS -->
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/materialize.min.css') }}">
+    </head>
+    <body>
+        <div class="container">
+            <h1>Payload reçus</h1>
+            <input type="submit" value="Clear data" onclick="window.location.href='clean-redis'" />
+            <table>
+                <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Path</th>
+                    <th>Payload</th>
+                    <th>Response</th>
+                </tr>
+                </thead>
+        
+                <tbody>
+                    {% for ID, data in logs %}  
+                    <tr>
+                        <td>
+                            {{ data['time'] }}
+                        </td>
+                        <td>
+                            {{ data['path'] }}
+                        </td>
+                        <td>
+                            <pre>{{ data['payload'] | to_pretty_json}}</pre>
+
+                        </td>
+                        <td>
+                            <pre>{{ data['response'] | to_pretty_json}}</pre>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </body>
+</html>

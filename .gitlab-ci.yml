@@ -1,0 +1,30 @@
+image: keyopstech/docker-compose
+
+include:
+  - remote: 'https://raw.githubusercontent.com/keyopstech/gitlab-ci-templates/master/Docker-Tag.gitlab-ci.yml'
+
+services:
+  - docker:dind
+
+variables:
+  DOCKER_HOST: tcp://docker:2375
+  DOCKER_DRIVER: overlay2
+  IMAGE: ${CI_REGISTRY}/${CI_PROJECT_PATH}:$CI_COMMIT_REF_SLUG
+  CI_UPSTREAM_REF: master
+
+stages:
+  - build
+  - release
+
+before_script:
+  - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN registry.gitlab.com
+
+docker-build:
+  stage: build
+  script:
+    - docker pull $IMAGE || true
+    - docker build --cache-from $IMAGE -t $IMAGE .
+    - docker push $IMAGE
+  only:
+    refs:
+      - branches
